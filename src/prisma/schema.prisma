@@ -1,0 +1,98 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id       Int      @id @default(autoincrement())
+  firstname String
+  lastname String
+  email    String   @unique
+  password String
+  delivery Delivery[]
+}
+
+model Restaurant {
+  id       Int      @id @default(autoincrement())
+  name     String
+  address  String
+  phone    String
+  email    String   @unique
+  password String
+  delivery Delivery[]
+  card Card[]
+}
+
+model DeliveryMan {
+  id       Int      @id @default(autoincrement())
+  firstname String
+  lastname String
+  email    String   @unique
+  password String
+  delivery Delivery[]
+}
+
+model Delivery {
+  id       Int      @id @default(autoincrement())
+  date     DateTime
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  deliveryMan DeliveryMan @relation(fields: [deliveryManId], references: [id])
+  deliveryManId Int
+  customer Customer @relation(fields: [customerId], references: [id])
+  customerId Int
+  order Order[]
+}
+
+model Card {
+  id       Int      @id @default(autoincrement())
+  restaurant Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
+  menu Menu[]
+}
+
+model Menu {
+  id       Int      @id @default(autoincrement())
+  name     String
+  description String
+  price    Float
+  card Card @relation(fields: [cardId], references: [id])
+  cardId Int
+  order Order[]
+  menuDish MenuDish[]
+}
+
+model Dish {
+  id       Int      @id @default(autoincrement())
+  name     String
+  description String
+  price    Float
+  menuDish MenuDish[]
+  order Order[]
+}
+
+model Order {
+  id       Int      @id @default(autoincrement())
+  menu Menu @relation(fields: [menuId], references: [id])
+  menuId Int
+  dish Dish @relation(fields: [dishId], references: [id])
+  dishId Int
+  delivery Delivery @relation(fields: [deliveryId], references: [id])
+  deliveryId Int
+}
+
+model MenuDish {
+  menu Menu @relation(fields: [menuId], references: [id])
+  menuId Int
+  dish Dish @relation(fields: [dishId], references: [id])
+  dishId Int 
+
+  @@id([menuId, dishId])
+}
