@@ -1,0 +1,57 @@
+type Customer {
+    firstname: String!
+    lastname: String!
+    email: String!
+}
+
+type Restaurant {
+    name: String!
+    address: String!
+    phone: String!
+    email: String!
+}
+
+type DeliveryMan {
+    firstname: String!
+    lastname: String!
+    email: String!
+}
+
+type Delivery {
+    date: String!
+    restaurantId: ID!
+    customerId: ID!
+    deliveryManId: ID!
+}
+
+type Card {
+    RestaurantId: ID!
+}
+
+type Menu {
+    name: String!
+    description: String!
+    price: Float!
+    CardId: ID! 
+}
+
+type Dish {
+    name: String!
+    description: String!
+    price: Float!
+}
+
+type Order {
+    menuId: ID!
+    dishId: ID!
+    deliveryId: ID!
+}
+
+type MenuDish {
+    menuId: ID!
+    dishId: ID!
+}
+
+type Query {
+    
+}

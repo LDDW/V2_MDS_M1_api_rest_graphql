@@ -1,4 +1,5 @@
 import { Request, Response } from 'express';
+import { prisma } from '../services/PrismaService';
 
 class DeliveryManController {
 
@@ -7,17 +8,17 @@ class DeliveryManController {
         res.send("Get all users");
     }
 
-    static create(req: any, res: any) 
+    static create(req: Request, res: Response) 
     {
         res.send("Create user");
     }
 
-    static update(req: any, res: any) 
+    static update(req: Request, res: Response) 
     {
         res.send("Update user");
     }
 
-    static delete(req: any, res: any) 
+    static delete(req: Request, res: Response) 
     {
         res.send("Delete user");
     }

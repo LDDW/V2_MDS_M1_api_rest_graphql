@@ -1,0 +1,113 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model Customer {
+  id        Int        @id @default(autoincrement())
+  firstname String
+  lastname  String
+  email     String     @unique
+  password  String
+  delivery  Delivery[]
+}
+
+model Restaurant {
+  id       Int        @id @default(autoincrement())
+  name     String
+  address  String
+  phone    String
+  email    String     @unique
+  password String
+  card     Card[]
+  delivery Delivery[]
+}
+
+model DeliveryMan {
+  id        Int        @id @default(autoincrement())
+  firstname String
+  lastname  String
+  email     String     @unique
+  password  String
+  delivery  Delivery[]
+}
+
+model Delivery {
+  id            Int         @id @default(autoincrement())
+  restaurantId  Int
+  deliveryManId Int
+  customerId    Int
+  date          DateTime
+  customer      Customer    @relation(fields: [customerId], references: [id])
+  deliveryMan   DeliveryMan @relation(fields: [deliveryManId], references: [id])
+  restaurant    Restaurant  @relation(fields: [restaurantId], references: [id])
+  order         Order[]
+
+  @@index([customerId], map: "Delivery_customerId_fkey")
+  @@index([deliveryManId], map: "Delivery_deliveryManId_fkey")
+  @@index([restaurantId], map: "Delivery_restaurantId_fkey")
+}
+
+model Card {
+  id           Int        @id @default(autoincrement())
+  restaurantId Int
+  restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  dish         Dish[]
+  menu         Menu[]
+
+  @@index([restaurantId], map: "Card_restaurantId_fkey")
+}
+
+model Menu {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  cardId      Int
+  card        Card       @relation(fields: [cardId], references: [id])
+  menuDish    MenuDish[]
+  order       Order[]
+
+  @@index([cardId], map: "Menu_cardId_fkey")
+}
+
+model Dish {
+  id          Int        @id @default(autoincrement())
+  name        String
+  description String
+  price       Float
+  cardId      Int
+  card        Card       @relation(fields: [cardId], references: [id])
+  menuDish    MenuDish[]
+  order       Order[]
+
+  @@index([cardId], map: "Dish_cardId_fkey")
+}
+
+model Order {
+  id         Int      @id @default(autoincrement())
+  menuId     Int
+  dishId     Int
+  deliveryId Int
+  delivery   Delivery @relation(fields: [deliveryId], references: [id])
+  dish       Dish     @relation(fields: [dishId], references: [id])
+  menu       Menu     @relation(fields: [menuId], references: [id])
+
+  @@index([deliveryId], map: "Order_deliveryId_fkey")
+  @@index([dishId], map: "Order_dishId_fkey")
+  @@index([menuId], map: "Order_menuId_fkey")
+}
+
+model MenuDish {
+  menuId Int
+  dishId Int
+  dish   Dish @relation(fields: [dishId], references: [id])
+  menu   Menu @relation(fields: [menuId], references: [id])
+
+  @@id([menuId, dishId])
+  @@index([dishId], map: "MenuDish_dishId_fkey")
+}
