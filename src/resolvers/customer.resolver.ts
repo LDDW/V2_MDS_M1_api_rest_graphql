@@ -1,11 +1,35 @@
 import { CustomerController } from "../controllers/CustomerController";
 
-export async function allCustomers() {
-    const customers = await CustomerController.get
-    return customers
-}
+const customerController = new CustomerController();
 
-export async function createCustomer() {
-    const customer = await CustomerController.create
+async function customer(parent:any, args:any, context:any) {
+    // middleware authenticate
+    // call controller
+
     return customer
 }
+
+async function customerLogin() {
+    const customer = customerController.create
+    return customer
+}
+
+async function customerRegister() {
+    const customer = customerController.create
+    return customer
+}
+
+async function customerUpdate() {
+    // middleware authenticate
+
+    const customer = customerController.create
+    return customer
+}
+
+async function customerDelete() {
+    // middleware authenticate
+    const customer = customerController.create
+    return customer
+}
+
+export { customer, customerLogin, customerRegister, customerUpdate, customerDelete }

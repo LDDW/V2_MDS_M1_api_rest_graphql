@@ -1,6 +1,5 @@
 import { hash, compare } from "bcrypt";
 import jwt from "jsonwebtoken";
-import dotenv from "dotenv";
 
 abstract class User {
     // hash password

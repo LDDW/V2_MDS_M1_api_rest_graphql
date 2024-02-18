@@ -1,20 +1,26 @@
 type Customer {
-    firstname: String!
-    lastname: String!
-    email: String!
+    id: ID
+    firstname: String
+    lastname: String
+    email: String
+    password: String
 }
 
 type Restaurant {
+    id: ID
     name: String!
     address: String!
     phone: String!
     email: String!
+    password: String!
 }
 
 type DeliveryMan {
+    id: Int!
     firstname: String!
     lastname: String!
     email: String!
+    password: String!
 }
 
 type Delivery {
@@ -53,5 +59,23 @@ type MenuDish {
 }
 
 type Query {
-    
+    customer: Customer
+}
+
+type Mutation {
+    # customer
+    customerLogin(email: String!, password: String!): Customer
+    customerRegister(firstname: String!, lastname: String!, email: String!, password: String!): Customer
+    customerUpdate(id: Int!, firstname: String!, lastname: String!, email: String!): Customer
+    customerDelete(id: Int!): Customer
+
+    # deliveryMan
+
+    # restaurant
+
+    # deliveries
+
+    # dishes
+
+    # Menu
 }

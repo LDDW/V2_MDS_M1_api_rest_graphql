@@ -1,10 +1,21 @@
-import {allCustomers} from "./customer.resolver";
-  
-//   import { login, sendRecovery, changePassword } from "../modules/auth/auth.resolver";
+import { customer, customerLogin, customerRegister, customerUpdate, customerDelete } from "./customer.resolver";
 
 export const resolvers = {
-    Query: {
-        allCustomers,
-    }
+    // customer resolvers
+    customer: customer,
+    customerLogin: customerLogin,
+    customerRegister: customerRegister,
+    customerUpdate: customerUpdate,
+    customerDelete: customerDelete,
+
+    // deliveryMan resolvers
+
+    // restaurant resolvers
+
+    // deliveries resolvers
+
+    // dishes resolvers
+
+    // Menu resolvers
 };
   

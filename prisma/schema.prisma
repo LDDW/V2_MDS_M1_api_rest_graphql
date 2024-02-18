@@ -12,6 +12,7 @@ model Customer {
   firstname String
   lastname  String
   email     String     @unique
+  role      String
   password  String
   delivery  Delivery[]
 }
@@ -22,6 +23,7 @@ model Restaurant {
   address  String
   phone    String
   email    String     @unique
+  role      String
   password String
   card     Card[]
   delivery Delivery[]
@@ -32,6 +34,7 @@ model DeliveryMan {
   firstname String
   lastname  String
   email     String     @unique
+  role      String    
   password  String
   delivery  Delivery[]
 }

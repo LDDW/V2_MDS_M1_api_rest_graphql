@@ -16,19 +16,21 @@ class CustomerController extends User {
         try {
             const customer = await prisma.customer.findUnique({
                 where: {
-                    id: parseInt(req.params.id)
+                    id: parseInt(req.user.id)
                 }
             });
+
+            if(!customer) return res.status(404).json({ message: 'Customer not found' });
+
             res.status(200).json({
                 data: customer,
             });
         } catch (error) {
-            res.status(500).json({
-                error: error,
-            })
+            return res.status(500).json({error: error});
         }
     }
 
+    // POST /customers/login : Customer login
     public async login(req: Request, res: Response)
     {
         try {
@@ -56,10 +58,10 @@ class CustomerController extends User {
 
             // jwt token (role : customer)
             const token = super.generateToken(customer);
-            return res.status(200).json({ message: 'Login success', data: { customer, token } });
+            return res.status(200).json({ message: 'Login success', customer, token });
 
         } catch (error) {
-            return res.status(500).json({ error: error });
+            return res.status(500).json({error: error});
         }
     }
 
@@ -82,48 +84,63 @@ class CustomerController extends User {
                     firstname: req.body.firstname,
                     lastname: req.body.lastname,
                     email: req.body.email,
+                    role: 'customer',
                     password: hashedPassword,
                 }
             });
 
             return res.status(201).json({ message: 'Customer created', data: customer});
         } catch (error) {
-            console.log(error);
-            return res.status(500).json({ error: error });
+            return res.status(500).json({error: error});
         }
     }
 
     // PUT /customers/:id : Update a customer
-    public update(req: Request, res: Response) 
+    public async update(req: Request, res: Response) 
     {
         try {
-            const customer = prisma.customer.update({
+
+            // verify customerUpdateValidator rules in routes.ts
+            const errors = validationResult(req);
+            if (!errors.isEmpty()) {
+                return res.status(400).json({ errors: errors.array() });
+            }
+
+            // update customer
+            const customer = await prisma.customer.update({
                 where: {
-                    id: parseInt(req.params.id)
+                    id: parseInt(req.user.id)
                 },
                 data: {
                     firstname: req.body.firstname,
                     lastname: req.body.lastname,
-                    email: req.body.email,
-                    password: req.body.password
+                    email: req.body.email
                 }
             });
+
+            if (!customer) return res.status(404).json({ message: 'Customer not found' });
+
+            return res.status(200).json({ message: 'Customer updated', data: customer });
         } catch (error) {
-            return res.status(500).json({ error: error });
+            return res.status(500).json({error: error});
         }
     }
 
     // DELETE /customers/:id : Delete a customer
-    public delete(req: Request, res: Response) 
+    public async delete(req: Request, res: Response) 
     {
         try {
-            const customer = prisma.customer.delete({
+            const customer = await prisma.customer.delete({
                 where: {
-                    id: parseInt(req.params.id)
+                    id: parseInt(req.user.id)
                 }
             });
+
+            if (!customer) return res.status(404).json({ message: 'Customer not found' });
+
+            return res.status(200).json({ message: 'Customer deleted', data: customer });
         } catch (error) {
-            return res.status(500).json({ error: error });
+            return res.status(500).json({error: error});
         }
     }
 

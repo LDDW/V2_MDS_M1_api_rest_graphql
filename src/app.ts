@@ -17,17 +17,18 @@ app.use(bodyParser.json());
 
 app.use("/api", Routes);
 
-// graphql  
-// const root =  {
-//     ...resolvers
-// }
-// const schema = buildSchema(fs.readFileSync(__dirname + "/graphql/schema.gql", "utf8"))
-// // console.log(schema)
 
-// app.use("/graphql", graphqlHTTP({
-//     schema: schema,
-//     rootValue: root,
-//     graphiql: true
-// }))
+// graphql  
+const schema = buildSchema(fs.readFileSync(__dirname + "/graphql/schema.gql", "utf8"))
+
+const rootValue = {
+    ...resolvers
+}
+
+app.use("/graphql", cors(), graphqlHTTP({
+    schema: schema,
+    rootValue: rootValue,
+    graphiql: true
+}))
 
 app.listen(3000); 
