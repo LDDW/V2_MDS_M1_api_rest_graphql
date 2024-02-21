@@ -1,13 +1,83 @@
 {
     "openapi": "3.0.0",
     "info": {
-        "title": "API",
-        "description": "API",
+        "title": "UBER EATS LIKE API",
+        "description": "API for the project",
         "version": "1.0.0"
     },
     "schemes": ["http"],
     "servers": [{ "url": "http://localhost:3000" }],
     "paths": {
-        
+        "/api/customer/login": {
+            "post": {
+                "summary": "Get user data",
+                "description": "Get user data if his is logged in.",
+                "tags": ["Customer"]
+            }
+        },
+        "/api/customer": {
+            "post": {
+                "summary": "Get user data",
+                "description": "Get user data if his is logged in.",
+                "tags": ["Customer"]
+            },
+            "get": {
+                "summary": "Get user data",
+                "description": "Get user data if his is logged in.",
+                "tags": ["Customer"],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "items": {
+                                        "type": "object",
+                                        "properties": {
+                                            "message" : {
+                                                "type": "string"
+                                            },
+                                            "customer": {
+                                                "type": "object",
+                                                "properties": {
+                                                    "id": {
+                                                        "type": "integer"
+                                                    },
+                                                    "name": {
+                                                        "type": "string"
+                                                    },
+                                                    "email": {
+                                                        "type": "string"
+                                                    },
+                                                    "role": {
+                                                        "type": "string"
+                                                    },
+                                                    "password": {
+                                                        "type": "string"
+                                                    }
+                                                }
+                                            },
+                                            "token": {
+                                                "type": "string"
+                                            }
+                                        }
+                                    }
+                                }
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "summary": "Get user data",
+                "description": "Get user data if his is logged in.",
+                "tags": ["Customer"]
+            },
+            "delete": {
+                "summary": "Get user data",
+                "description": "Get user data if his is logged in.",
+                "tags": ["Customer"]
+            }
+        }
     }
 }

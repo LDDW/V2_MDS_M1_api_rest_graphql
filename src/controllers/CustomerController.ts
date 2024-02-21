@@ -1,7 +1,6 @@
 import { Request, Response } from 'express';
 import { prisma } from '../services/PrismaService';
 import { validationResult } from 'express-validator';
-import { separateOperations } from 'graphql';
 import { User } from './User';
 
 class CustomerController extends User {
@@ -11,57 +10,51 @@ class CustomerController extends User {
     }
 
     // Get / customers : Get a customer
-    public async get(req: Request, res: Response) 
+    public async get(userId: any) 
     {
         try {
             const customer = await prisma.customer.findUnique({
                 where: {
-                    id: parseInt(req.user.id)
+                    id: parseInt(userId)
                 }
             });
 
-            if(!customer) return res.status(404).json({ message: 'Customer not found' });
+            if(!customer) return { message: 'Customer not found' };
 
-            res.status(200).json({
-                data: customer,
-            });
+            return customer;
         } catch (error) {
-            return res.status(500).json({error: error});
+            return {error: error};
         }
     }
 
     // POST /customers/login : Customer login
-    public async login(req: Request, res: Response)
+    public async login(email: string, password: string)
     {
-        try {
-            // verify customer login validator rules in routes.ts
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
-            }
 
+        try {
             // verify email
             const customer = await prisma.customer.findUnique({
                 where: {
-                    email: req.body.email
+                    email: email
                 }
             });
+
             if (!customer) {
-                return res.status(400).json({ message: 'Invalid e-mail' });
+                return { message: 'Invalid e-mail' };
             }
 
             // verify password
-            const validPassword = await super.verifyPassword(req.body.password, customer.password);
+            const validPassword = await super.verifyPassword(password, customer.password);
             if (!validPassword) {
-                return res.status(400).json({ message: 'Invalid password' });
+                return { message: 'Invalid password' };
             }
 
-            // jwt token (role : customer)
+            // jwt token
             const token = super.generateToken(customer);
-            return res.status(200).json({ message: 'Login success', customer, token });
+            return token;
 
         } catch (error) {
-            return res.status(500).json({error: error});
+            return {error: error};
         }
     }
 

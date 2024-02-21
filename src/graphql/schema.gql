@@ -62,10 +62,16 @@ type Query {
     customer: Customer
 }
 
+type AuthPayload {
+    message: String
+    customer: Customer
+    token: String
+}
+
 type Mutation {
     # customer
-    customerLogin(email: String!, password: String!): Customer
-    customerRegister(firstname: String!, lastname: String!, email: String!, password: String!): Customer
+    customerLogin(email: String, password: String): String!
+    customerRegister(firstname: String!, lastname: String!, email: String!, password: String!): Customer!
     customerUpdate(id: Int!, firstname: String!, lastname: String!, email: String!): Customer
     customerDelete(id: Int!): Customer
 

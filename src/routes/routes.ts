@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { Request, Response } from 'express';
 
 // controllers
 import { CustomerController } from "../controllers/CustomerController";
@@ -12,6 +13,7 @@ import { DeliverieController } from "../controllers/DeliveriesController";
 import { CustomerLoginValidation, CustomerCreateValidation, CustomerUpdateValidation } from "../middlewares/validations/CustomerValidation";
 // middleware
 import { authenticate } from "../middlewares/Authenticate";
+import { validated } from "../middlewares/Validated";
 
 // create a new router
 const router = Router();
@@ -22,11 +24,27 @@ router.get("/", (req, res) => {
 
 // Customer routes
 const customerController = new CustomerController();
-router.get("/customers", authenticate, customerController.get);
-router.post("/customers/login", CustomerLoginValidation, customerController.login);
-router.post("/customers", CustomerCreateValidation, customerController.create);
-router.put("/customers/:id", authenticate, CustomerUpdateValidation, customerController.update);
-router.delete("/customers/:id", authenticate, customerController.delete);
+router.get("/customer", authenticate, async (req:Request, res:Response) => {
+    try {
+        const customer = await customerController.get(req.user.id);
+        return res.status(200).json(customer);
+    } catch (error) {
+        return res.status(500).json({error: error});
+    }
+});
+
+router.post("/customer/login", CustomerLoginValidation, validated, async (req:Request, res:Response) => {
+    try {
+        const customer = await customerController.login(req.body.email, req.body.password);
+        return res.status(200).json(customer);
+    } catch (error) {
+        return res.status(500).json({error: error});
+    }
+});
+
+router.post("/customer", CustomerCreateValidation, customerController.create);
+router.put("/customer/:id", authenticate, CustomerUpdateValidation, customerController.update);
+router.delete("/customer/:id", authenticate, customerController.delete);
 
 // Restaurants routes
 router.get("/restaurants", RestaurantController.get);

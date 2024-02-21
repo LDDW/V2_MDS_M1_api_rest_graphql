@@ -25,10 +25,10 @@ const rootValue = {
     ...resolvers
 }
 
-app.use("/graphql", cors(), graphqlHTTP({
+app.use("/api/graphql", cors(), graphqlHTTP({
     schema: schema,
     rootValue: rootValue,
-    graphiql: true
+    graphiql: true,
 }))
 
 app.listen(3000); 
