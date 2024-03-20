@@ -1,4 +1,4 @@
-import { CustomerController } from "../controllers/CustomerController";
+import { CustomerController } from "../../controllers/CustomerController";
 import jwt from "jsonwebtoken";
 
 const customerController = new CustomerController();
@@ -37,22 +37,4 @@ async function customerLogin(root:any, args: any, context:any) {
     }
 }
 
-async function customerRegister(req:any, res: any) {
-    const customer = customerController.create
-    return customer
-}
-
-async function customerUpdate(req:any, res: any) {
-    // middleware authenticate
-
-    const customer = customerController.create
-    return customer
-}
-
-async function customerDelete(req:any, res: any) {
-    // middleware authenticate
-    const customer = customerController.create
-    return customer
-}
-
-export { customer, customerLogin, customerRegister, customerUpdate, customerDelete }
+export { customer, customerLogin }

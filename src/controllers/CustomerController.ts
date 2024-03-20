@@ -1,6 +1,4 @@
-import { Request, Response } from 'express';
 import { prisma } from '../services/PrismaService';
-import { validationResult } from 'express-validator';
 import { User } from './User';
 
 class CustomerController extends User {
@@ -9,131 +7,158 @@ class CustomerController extends User {
         super();
     }
 
-    // Get / customers : Get a customer
-    public async get(userId: any) 
+    /**
+     * This function get the customer data logged in (Route : GET /customer)
+     * 
+     * @param customerId 
+     * @returns object of customer or an error
+     */
+    public async get(customerId: string) 
     {
         try {
             const customer = await prisma.customer.findUnique({
+                select: {
+                    id: true,
+                    firstname: true,
+                    lastname: true,
+                    email: true,
+                },
                 where: {
-                    id: parseInt(userId)
+                    id: parseInt(customerId)
                 }
             });
 
-            if(!customer) return { message: 'Customer not found' };
+            if(!customer) throw new Error("Customer not found")
 
             return customer;
-        } catch (error) {
-            return {error: error};
+        } catch (error:any) {
+            return {error: error.message};
         }
     }
 
-    // POST /customers/login : Customer login
+    /**
+     * This function login the customer (Route : POST /customer/login)
+     * 
+     * @param email 
+     * @param password 
+     * @returns token of customer or an error
+     */
     public async login(email: string, password: string)
     {
-
         try {
-            // verify email
             const customer = await prisma.customer.findUnique({
                 where: {
                     email: email
                 }
             });
 
-            if (!customer) {
-                return { message: 'Invalid e-mail' };
+            if (!customer || !(await super.verifyPassword(password, customer?.password || ''))) {
+                throw new Error("wrong email or password");
             }
 
-            // verify password
-            const validPassword = await super.verifyPassword(password, customer.password);
-            if (!validPassword) {
-                return { message: 'Invalid password' };
-            }
-
-            // jwt token
             const token = super.generateToken(customer);
             return token;
-
-        } catch (error) {
-            return {error: error};
+        } catch (error:any) {
+            return {error: error.message};
         }
     }
 
-    // POST /customers : Create a new customer
-    public async create(req: Request, res: Response) 
+    /**
+     * This function create a customer (Route : POST /customer)
+     * 
+     * @param firstname 
+     * @param lastname 
+     * @param email 
+     * @param password 
+     * @returns object of customer or an error
+     */
+    public async create(firstname: string, lastname: string, email: string, password: string) 
     {
         try {
-            // verify customerCreateValidator rules in routes.ts
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
-            }
+            const hashedPassword = await super.hashPassword(password);
 
-            // hash password
-            const hashedPassword = await super.hashPassword(req.body.password);
-
-            // create a new customer
             const customer = await prisma.customer.create({
+                select: {
+                    id: true,
+                    firstname: true,
+                    lastname: true,
+                    email: true,
+                },
                 data: {
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    email: req.body.email,
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
                     role: 'customer',
                     password: hashedPassword,
                 }
             });
 
-            return res.status(201).json({ message: 'Customer created', data: customer});
-        } catch (error) {
-            return res.status(500).json({error: error});
+            return customer;
+        } catch (error:any) {
+            return {error: error.message};
         }
     }
 
-    // PUT /customers/:id : Update a customer
-    public async update(req: Request, res: Response) 
+    /**
+     * This function update the customer data (Route : PUT /customer/:id)
+     * 
+     * @param customerId
+     * @param lastname 
+     * @param firstname 
+     * @param email 
+     * @returns object of customer or an error
+     */
+    public async update(customerId: string, lastname: string, firstname:string, email: string, password: string) 
     {
         try {
+            const hashedPassword = password ? await super.hashPassword(password) : undefined;
 
-            // verify customerUpdateValidator rules in routes.ts
-            const errors = validationResult(req);
-            if (!errors.isEmpty()) {
-                return res.status(400).json({ errors: errors.array() });
-            }
-
-            // update customer
             const customer = await prisma.customer.update({
+                select: {
+                    id: true,
+                    firstname: true,
+                    lastname: true,
+                    email: true,
+                },
                 where: {
-                    id: parseInt(req.user.id)
+                    id: parseInt(customerId)
                 },
                 data: {
-                    firstname: req.body.firstname,
-                    lastname: req.body.lastname,
-                    email: req.body.email
+                    firstname: firstname,
+                    lastname: lastname,
+                    email: email,
+                    password: hashedPassword
                 }
             });
 
-            if (!customer) return res.status(404).json({ message: 'Customer not found' });
+            if(!customer) throw new Error("Customer not found")
 
-            return res.status(200).json({ message: 'Customer updated', data: customer });
-        } catch (error) {
-            return res.status(500).json({error: error});
+            return customer;
+        } catch (error:any) {
+            return {error: error.message};
         }
     }
 
-    // DELETE /customers/:id : Delete a customer
-    public async delete(req: Request, res: Response) 
+    /**
+     * This function delete the customer (Route : DELETE /customer/:id)
+     * 
+     * @param customerId 
+     * @returns message or an error
+     */
+    public async delete(customerId: string) 
     {
         try {
             const customer = await prisma.customer.delete({
                 where: {
-                    id: parseInt(req.user.id)
+                    id: parseInt(customerId)
                 }
             });
 
-            if (!customer) return res.status(404).json({ message: 'Customer not found' });
+            if(!customer) throw new Error("Customer not found")
 
-            return res.status(200).json({ message: 'Customer deleted', data: customer });
-        } catch (error) {
-            return res.status(500).json({error: error});
+            return { msg: 'Customer deleted' };
+        } catch (error:any) {
+            return {error: error.message};
         }
     }
 

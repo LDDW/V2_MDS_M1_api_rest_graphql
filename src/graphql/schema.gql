@@ -58,30 +58,18 @@ type MenuDish {
     dishId: ID!
 }
 
+
+# query and mutation
 type Query {
     customer: Customer
-}
-
-type AuthPayload {
-    message: String
-    customer: Customer
-    token: String
+    restaurant: Restaurant
+    deliveryMan: DeliveryMan
+    delivery: Delivery
+    menu: Menu
+    dish: Dish
 }
 
 type Mutation {
     # customer
     customerLogin(email: String, password: String): String!
-    customerRegister(firstname: String!, lastname: String!, email: String!, password: String!): Customer!
-    customerUpdate(id: Int!, firstname: String!, lastname: String!, email: String!): Customer
-    customerDelete(id: Int!): Customer
-
-    # deliveryMan
-
-    # restaurant
-
-    # deliveries
-
-    # dishes
-
-    # Menu
 }

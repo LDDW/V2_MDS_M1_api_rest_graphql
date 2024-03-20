@@ -13,7 +13,7 @@ model Customer {
   lastname  String
   email     String     @unique
   role      String
-  password  String
+  password  String?
   delivery  Delivery[]
 }
 
@@ -23,8 +23,8 @@ model Restaurant {
   address  String
   phone    String
   email    String     @unique
-  role      String
-  password String
+  role     String
+  password String?
   card     Card[]
   delivery Delivery[]
 }
@@ -35,7 +35,7 @@ model DeliveryMan {
   lastname  String
   email     String     @unique
   role      String    
-  password  String
+  password  String?
   delivery  Delivery[]
 }
 
@@ -81,24 +81,23 @@ model Menu {
 model Dish {
   id          Int        @id @default(autoincrement())
   name        String
-  description String
   price       Float
   cardId      Int
   card        Card       @relation(fields: [cardId], references: [id])
   menuDish    MenuDish[]
   order       Order[]
-
+  
   @@index([cardId], map: "Dish_cardId_fkey")
 }
 
 model Order {
   id         Int      @id @default(autoincrement())
-  menuId     Int
-  dishId     Int
+  menuId     Int?
+  dishId     Int?
   deliveryId Int
   delivery   Delivery @relation(fields: [deliveryId], references: [id])
-  dish       Dish     @relation(fields: [dishId], references: [id])
-  menu       Menu     @relation(fields: [menuId], references: [id])
+  dish       Dish?     @relation(fields: [dishId], references: [id])
+  menu       Menu?     @relation(fields: [menuId], references: [id])
 
   @@index([deliveryId], map: "Order_deliveryId_fkey")
   @@index([dishId], map: "Order_dishId_fkey")

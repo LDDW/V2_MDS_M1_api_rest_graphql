@@ -2,12 +2,12 @@ import express from "express";
 import bodyParser from "body-parser";
 import swaggerUi from "swagger-ui-express";
 import * as swaggerDocument from "./swagger.json"
-import Routes from "./routes/routes";
+import Routes from "./routes";
 import { graphqlHTTP } from "express-graphql";
 import { buildSchema } from "graphql";
 import cors from "cors";
 import fs from "fs";
-import { resolvers } from "./resolvers/resolvers";
+import { resolvers } from "./graphql/resolvers/resolvers";
 
 const app = express();
 app.use(cors());

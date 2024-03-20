@@ -1,10 +1,17 @@
 import { Request, Response, NextFunction } from "express";
 
-export function hasRole(role: string) {
+export function hasRole(role: string[]) {
     return (req: Request, res: Response, next: NextFunction) => {
-        if (req.user.role !== role) {
-            return res.status(403).json({ message: 'Access Denied' });
+        let roleFound = false;
+        role.forEach((role) => {
+            if (req.user.role === role) {
+                roleFound = true;
+                return next();
+            }
+        });
+
+        if (!roleFound) {
+            return res.status(403).json({ error: "Forbidden" });
         }
-        next();
     }
 }
