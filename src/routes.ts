@@ -209,7 +209,7 @@ router.delete("/menu/:id", authenticate, hasRole(['restaurant']), authenticate, 
 
 // Dishes routes
 router.get("/dishes", authenticate, async (req:Request, res:Response) => {
-    await wrapper(disheController.get(), req, res);
+    await wrapper(disheController.get(req.params.id), req, res);
 });
 router.post("/dishes", authenticate, hasRole(['restaurant']), async (req:Request, res:Response) => {
     await wrapper(disheController.create(req.body.name, req.body.price, req.params.id), req, res);

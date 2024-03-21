@@ -27,6 +27,8 @@ class RestaurantController extends User {
                 }
             });
 
+            console.log(restaurant[0].card);
+
             return restaurant;
         } catch (error:any) {
             return {error: error.message};

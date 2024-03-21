@@ -10,17 +10,18 @@ class MenuController {
      */
     public async get_menus(restaurantId: string) {
         try {
-            const menus = await prisma.restaurant.findMany({
-                select: {
+            const menus = await prisma.menu.findMany({
+                where: {
                     card: {
-                        select: {
-                            menu: true
-                        },
-                        where: {
-                            id: parseInt(restaurantId)
-                        },
+                        restaurantId: parseInt(restaurantId)
                     }
-                }
+                },
+                select: {
+                    id: true,
+                    name: true,
+                    description: true,
+                    price: true,
+                },
             });
 
             if (!menus) return { error: 'Restaurant not found' };
@@ -40,13 +41,19 @@ class MenuController {
     public async get_menu(menuId: string) {
         try {
             const menu = await prisma.menu.findUnique({
-                select: {
-                    menuDish: true,
-                },
                 where: {
                     id: parseInt(menuId)
+                },
+                include: {
+                    menuDish: {
+                        include: {
+                            dish: true
+                        }
+                    }
                 }
             });
+
+            console.log(menu);
 
             if (!menu) return { error: 'Menu not found' };
 

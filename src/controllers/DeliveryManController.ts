@@ -18,15 +18,15 @@ class DeliveryManController extends User {
             const deliveryMan = await prisma.deliveryMan.findUnique({
                 where: {
                     id: parseInt(deliveryManId)
+                },
+                include: {
+                    delivery: true
                 }
             });
-            const deliveries = await prisma.delivery.findMany({
-                where: {
-                    deliveryManId: parseInt(deliveryManId)
-                }
-            })
 
-            return {deliveryMan: deliveryMan, deliveries}
+            console.log(deliveryMan);
+
+            return deliveryMan;
         } catch (error:any) {
             return {error: error.message};
         }

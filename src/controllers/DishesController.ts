@@ -7,10 +7,16 @@ class DishesController {
      * 
      * @returns 
      */
-    public async get()  
+    public async get(restaurantId: string)  
     {
         try {
-            const dishes = await prisma.dish.findMany();
+            const dishes = await prisma.dish.findMany({
+                where: {
+                    card: {
+                        restaurantId: parseInt(restaurantId)
+                    }
+                }
+            });
             return dishes;
         } catch (error:any) {
             return {error: error.message};
@@ -36,7 +42,7 @@ class DishesController {
 
             if(!card) return { error: 'Card not found' };
 
-            const dishe = await prisma.dish.create({
+            const dish = await prisma.dish.create({
                 data: {
                     name: name,
                     price: price,
@@ -44,9 +50,9 @@ class DishesController {
                 }
             });
 
-            if(!dishe) return { error: 'Error to create dishe' };
+            if(!dish) return { error: 'Error to create dish' };
 
-            return dishe;
+            return dish;
         } catch (error:any) {
             return {error: error.message};
         }

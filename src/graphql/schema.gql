@@ -8,65 +8,62 @@ type Customer {
 
 type Restaurant {
     id: ID
-    name: String!
-    address: String!
-    phone: String!
-    email: String!
-    password: String!
+    name: String
+    address: String
+    phone: String
+    email: String
+    password: String
+    card: Card
 }
 
 type DeliveryMan {
-    id: Int!
-    firstname: String!
-    lastname: String!
-    email: String!
-    password: String!
+    id: Int
+    firstname: String
+    lastname: String
+    email: String
+    password: String
+    delivery: [Delivery]
 }
 
 type Delivery {
-    date: String!
-    restaurantId: ID!
-    customerId: ID!
-    deliveryManId: ID!
-}
-
-type Card {
-    RestaurantId: ID!
+    date: String
+    restaurantId: ID
+    customerId: ID
+    deliveryManId: ID
 }
 
 type Menu {
-    name: String!
-    description: String!
-    price: Float!
-    CardId: ID! 
-}
-
-type Dish {
-    name: String!
-    description: String!
-    price: Float!
-}
-
-type Order {
-    menuId: ID!
-    dishId: ID!
-    deliveryId: ID!
+    name: String
+    description: String
+    price: Float
+    CardId: ID
+    menuDish: [MenuDish]
 }
 
 type MenuDish {
-    menuId: ID!
-    dishId: ID!
+    menuId: ID
+    dishId: ID
+    dish: Dish
 }
 
+type Dish {
+    name: String
+    price: Float
+}
+
+type Card {
+    menu: [Menu]
+    dish: [Dish]
+}
 
 # query and mutation
 type Query {
-    customer: Customer
-    restaurant: Restaurant
-    deliveryMan: DeliveryMan
-    delivery: Delivery
-    menu: Menu
-    dish: Dish
+    customer(id: ID!): Customer
+    restaurant: [Restaurant]
+    deliveryMan(id: ID!): DeliveryMan
+    menus(restaurantId: ID!): [Menu]
+    menu(menuId: ID!): Menu
+    dish(restaurantId: ID!): [Dish]
 }
 
 type Mutation {
