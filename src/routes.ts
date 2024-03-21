@@ -198,7 +198,7 @@ router.get("/menu/:id", authenticate, async (req:Request, res:Response) => {
     await wrapper(menuController.get_menu(req.params.id), req, res);
 });
 router.post("/menu", authenticate, hasRole(['restaurant']), async (req:Request, res:Response) => {
-    await wrapper(menuController.create(req.body.name, req.body.description, req.body.price, req.body.cardId), req, res);
+    await wrapper(menuController.create(req.params.id, req.body.name, req.body.description, req.body.price, req.body.cardId, req.body.dishes), req, res);
 });
 router.put("/menu/:id", authenticate, hasRole(['restaurant']), authenticate, async (req:Request, res:Response) => {
     await wrapper(menuController.update(req.params.menuId, req.body.name, req.body.description, req.body.price, req.body.cardId), req, res);
@@ -212,7 +212,7 @@ router.get("/dishes", authenticate, async (req:Request, res:Response) => {
     await wrapper(disheController.get(), req, res);
 });
 router.post("/dishes", authenticate, hasRole(['restaurant']), async (req:Request, res:Response) => {
-    await wrapper(disheController.create(req.body.name, req.body.price, req.body.cardId), req, res);
+    await wrapper(disheController.create(req.body.name, req.body.price, req.params.id), req, res);
 });
 router.put("/dishes/:id", authenticate, hasRole(['restaurant']), async (req:Request, res:Response) => {
     await wrapper(disheController.update(req.params.id, req.body.name, req.body.price, req.body.cardId), req, res);

@@ -25,14 +25,22 @@ class DishesController {
      * @param cardId 
      * @returns 
      */
-    public async create(name:string, price:number, cardId:string) 
+    public async create(name:string, price:number, restaurantId:string) 
     {
         try {
+            const card = await prisma.card.findFirst({
+                where: {
+                    restaurantId: parseInt(restaurantId)
+                }
+            });
+
+            if(!card) return { error: 'Card not found' };
+
             const dishe = await prisma.dish.create({
                 data: {
                     name: name,
                     price: price,
-                    cardId: parseInt(cardId)
+                    cardId: card.id
                 }
             });
 

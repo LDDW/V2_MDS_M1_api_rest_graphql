@@ -57,8 +57,8 @@ model Delivery {
 
 model Card {
   id           Int        @id @default(autoincrement())
-  restaurantId Int
   restaurant   Restaurant @relation(fields: [restaurantId], references: [id])
+  restaurantId Int
   dish         Dish[]
   menu         Menu[]
 

@@ -381,6 +381,32 @@
             "post": {
                 "summary": "Create a restaurant",
                 "tags": ["Restaurant"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "400": {
                         "content": {
@@ -410,6 +436,9 @@
                 "summary": "Get all restaurants",
                 "tags": ["Restaurant"],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    },
                     "400": {
                         "content": {
                             "application/json": {
@@ -449,7 +478,36 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "address": {
+                                        "type": "string"
+                                    },
+                                    "phone": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -488,6 +546,9 @@
                     }
                 ],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -535,6 +596,16 @@
                     }
                 },
                 "responses": {
+                    "200": {
+                        "description": "OK",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "type": "string"
+                                }
+                            }
+                        }
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -562,8 +633,31 @@
         },
         "/api/deliveryMan": {
             "post": {
-                "summary": "summary",
+                "summary": "Register a deliveryMan",
                 "tags": ["DeliveryMan"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "lastname": {
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
                     "400": {
                         "content": {
@@ -593,6 +687,9 @@
                 "summary": "summary",
                 "tags": ["DeliveryMan"],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -632,7 +729,33 @@
                         }
                     }
                 ], 
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "lastname": {
+                                        "type": "string"
+                                    },
+                                    "firstname": {
+                                        "type": "string"
+                                    },
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -671,6 +794,9 @@
                     }
                 ],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -701,6 +827,9 @@
                 "summary": "summary",
                 "tags": ["Menu"],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -726,9 +855,44 @@
                 }
             },
             "post": {
-                "summary": "summary",
+                "summary": "Create menu",
                 "tags": ["Menu"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "dishes": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "dishId": {
+                                                    "type": "number"
+                                                }
+                                            }
+                                        }
+                                    
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -756,7 +920,7 @@
         },
         "api/menus/:id": {
             "put": {
-                "summary": "summary",
+                "summary": "Update menu",
                 "tags": ["Menu"],
                 "parameters": [
                     {
@@ -768,7 +932,42 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "description": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    },
+                                    "dishes": {
+                                        "type": "array",
+                                        "items": {
+                                            "type": "object",
+                                            "properties": {
+                                                "dishId": {
+                                                    "type": "number"
+                                                }
+                                            }
+                                        }
+                                    
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -807,6 +1006,9 @@
                     }
                 ],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -834,9 +1036,12 @@
         },
         "api/dishes": {
             "get": {
-                "summary": "summary",
+                "summary": "Get dishes",
                 "tags": ["Dish"],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -862,9 +1067,29 @@
                 }
             },
             "post": {
-                "summary": "summary",
+                "summary": "Create dishes",
                 "tags": ["Dish"],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "email": {
+                                        "type": "string"
+                                    },
+                                    "password": {
+                                        "type": "string"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -904,7 +1129,27 @@
                         }
                     }
                 ],
+                "requestBody": {
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "type": "object",
+                                "properties": {
+                                    "name": {
+                                        "type": "string"
+                                    },
+                                    "price": {
+                                        "type": "number"
+                                    }
+                                }
+                            }
+                        }
+                    }
+                },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -933,6 +1178,9 @@
                 "summary": "Delete dish",
                 "tags": ["Dish"],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -963,6 +1211,9 @@
                 "summary": "Get Deliveries",
                 "tags": ["Delivery"],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -990,7 +1241,52 @@
             "post": {
                 "summary": "Create Deliveries",
                 "tags": ["Delivery"],
+                "requestBody": {
+                    "content": {
+                      "application/json": {
+                        "schema": {
+                          "type": "object",
+                          "properties": {
+                            "customer": {
+                              "type": "integer"
+                            },
+                            "restaurant": {
+                              "type": "integer"
+                            },
+                            "orders": {
+                              "type": "array",
+                              "items": {
+                                "type": "object",
+                                "oneOf": [
+                                  {
+                                    "properties": {
+                                      "menuId": {
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": ["menuId"]
+                                  },
+                                  {
+                                    "properties": {
+                                      "dishId": {
+                                        "type": "integer"
+                                      }
+                                    },
+                                    "required": ["dishId"]
+                                  }
+                                ]
+                              }
+                            }
+                          },
+                          "required": ["customer", "restaurant", "orders"]
+                        }
+                      }
+                    }
+                  },
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {
@@ -1031,6 +1327,9 @@
                     }
                 ],
                 "responses": {
+                    "403": {
+                        "description": "Forbidden"
+                    }, 
                     "400": {
                         "content": {
                             "application/json": {

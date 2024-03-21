@@ -65,16 +65,34 @@ class MenuController {
      * @param cardId 
      * @returns 
      */
-    public async create(name: string, description: string, price: number, cardId: string) {
+    public async create(restaurantId: string, name: string, description: string, price: number, cardId: string, dishes: any) {
         try {
+            const restaurant = await prisma.restaurant.findUnique({
+                where: {
+                    id: parseInt(restaurantId)
+                },
+                include: {
+                    card: true
+                }
+            });
+
+            if (!restaurant) return { error: 'Restaurant not found' };
+
             const menu = await prisma.menu.create({
                 data: {
                     name: name,
                     description: description,
                     price: price,
-                    cardId: parseInt(cardId)
+                    cardId: restaurant.id
                 }
             });
+
+            const dish = await prisma.menuDish.createMany({
+                data: dishes.map((item: any) => ({
+                    "menuId": menu.id,
+                    "dishId": item.dishId
+                }))
+            })
 
             if(!menu) return { error: 'Error to create menu' };
 

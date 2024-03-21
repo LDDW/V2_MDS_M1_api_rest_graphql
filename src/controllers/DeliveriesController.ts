@@ -146,9 +146,10 @@ class DeliverieController {
                     dishId: item.dishId !== undefined ? parseInt(item.dishId) : undefined,
                 }))
             });
+
+            if(!delivery) return { error: 'Error to delivery' };
         
             return delivery;
-    
         } catch (error:any) {
             return { error: error.message };
         }
